@@ -27,4 +27,11 @@ function start(){document.getElementById('intro').classList.add('hide');document
 function render(){let q=qs[idx];document.getElementById('counter').textContent=`प्रश्न ${idx+1}/${qs.length}`;document.getElementById('bar').style.width=((idx+1)/qs.length*100)+'%';document.getElementById('question').textContent=q[0];let box=document.getElementById('options');box.innerHTML='';q[1].forEach((o,i)=>{let b=document.createElement('button');b.className='opt'+(answers[idx]===i?' selected':'');b.textContent=String.fromCharCode(65+i)+'. '+o;b.onclick=()=>{answers[idx]=i;render()};box.appendChild(b)})}
 function next(){if(idx<qs.length-1){idx++;render()}}function prev(){if(idx>0){idx--;render()}}
 function submitTest(auto=false){if(done)return;done=true;clearInterval(tick);let score=0;qs.forEach((q,i)=>{if(answers[i]===q[2])score++});document.getElementById('quiz').classList.add('hide');document.getElementById('result').classList.remove('hide');document.getElementById('score').textContent=score+' / '+qs.length;document.getElementById('summary').textContent=`सही: ${score} • गलत: ${answers.filter((a,i)=>a!==-1&&a!==qs[i][2]).length} • छोड़े: ${answers.filter(a=>a===-1).length}`+(auto?' • समय समाप्त होने पर ऑटो-सबमिट':'');let r=document.getElementById('review');qs.forEach((q,i)=>{let d=document.createElement('div');d.className='review';let ok=answers[i]===q[2];d.innerHTML=`<b>Q${i+1}. ${q[0]}</b><p class="${ok?'good':'bad'}">${ok?'सही उत्तर':'आपका उत्तर: '+(answers[i]<0?'नहीं दिया':q[1][answers[i]])}</p><p>सही उत्तर: <b>${q[1][q[2]]}</b></p><p class="small">${q[3]}</p>`;r.appendChild(d)})}
-</script></body></html>
+</script>
+<div style="text-align:center;margin:20px;padding:15px">
+  <a href="mock-17-11-2026.html"
+     style="display:block;background:#e7c66b;color:#14253a;padding:15px;border-radius:12px;text-decoration:none;font-weight:bold">
+    नया Mock Test – 17 नवंबर 2026
+  </a>
+</div>
+</body></html>
