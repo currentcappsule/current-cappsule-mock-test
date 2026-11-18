@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Current Capsule Live Mock Test</title>
+<style>
+:root{--navy:#102a56;--blue:#1d4ed8;--yellow:#ffdf45;--green:#16834a;--bg:#f3f6fb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:system-ui,sans-serif;color:#182235}
+header{background:linear-gradient(120deg,#102a56,#174ea6);color:white;padding:24px 16px 30px;text-align:center}
+.brand{background:var(--yellow);color:#111;padding:5px 13px;border-radius:20px;font-weight:900}
+h1{margin:15px 0 5px}
+.wrap{max-width:760px;margin:-14px auto 30px;padding:0 13px}
+.panel{background:white;border-radius:18px;padding:17px;box-shadow:0 8px 25px #172b4d12;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.stat{background:#f2f6ff;border-radius:12px;padding:10px 4px}
+.stat b{display:block;font-size:20px;color:var(--navy)}
+.progress{height:8px;background:#e8edf5;border-radius:9px;overflow:hidden;margin:12px 0}
+.bar{height:100%;width:0;background:var(--blue)}
+.topline{display:flex;justify-content:space-between;font-size:13px;color:#667085}
+.tag{background:#fff4bf;color:#6d5200;padding:5px 9px;border-radius:8px;font-size:12px;font-weight:800}
+.question{font-size:19px;font-weight:800;line-height:1.55;margin:15px 0}
+.option{display:flex;gap:10px;border:1.5px solid #e1e7f0;border-radius:12px;padding:12px;margin:9px 0;cursor:pointer}
+.option.selected{border-color:var(--blue);background:#eff5ff}
+.option input{accent-color:var(--blue)}
+.controls{display:flex;gap:9px;margin-top:16px}
+.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:800;font-size:15px;cursor:pointer}
+.primary{background:var(--blue);color:white;flex:1}
+.secondary{background:#edf1f7;color:#24324a}
+.submit{background:var(--green);color:white;width:100%;margin-top:12px}
+.note{font-size:12px;color:#667085}
+.hidden{display:none!important}
+.result{text-align:center}
+.score{font-size:42px;font-weight:900;color:var(--navy)}
+.review-item{text-align:left;border-top:1px solid #e8edf5;padding:13px 0}
+.correct{color:var(--green);font-weight:800}
+.wrong{color:#e63946;font-weight:800}
+footer{text-align:center;color:#667085;font-size:12px;padding:20px}
+@media(max-width:420px){.question{font-size:17px}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+<span class="brand">CURRENT CAPSULE</span>
+<h1>आज का लाइव मॉक टेस्ट</h1>
+<p>18 नवंबर 2026 | करेंट अफेयर्स</p>
+<p>SSC • रेलवे • UPSC • UPPSC • पुलिस</p>
+</header>
+
+<div class="wrap">
+<section class="panel" id="intro">
+<div class="stats">
+<div class="stat"><b>10</b>प्रश्न</div>
+<div class="stat"><b>10</b>अंक</div>
+<div class="stat"><b>10 मिनट</b>समय</div>
+</div>
+<p><b>निर्देश:</b> प्रत्येक प्रश्न के चार विकल्प हैं। सही विकल्प चुनें। अंत में Submit Test दबाकर अपना स्कोर देखें।</p>
+<button class="btn primary" style="width:100%" onclick="startTest()">टेस्ट शुरू करें</button>
+</section>
+
+<section class="panel hidden" id="quiz">
+<div class="topline">
+<span id="counter">प्रश्न 1/10</span>
+<span>⏱️ <b id="timer">10:00</b></span>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="tag" id="category"></div>
+<div class="question" id="question"></div>
+<div id="options"></div>
+<div class="controls">
+<button class="btn secondary" onclick="move(-1)">पिछला</button>
+<button class="btn primary" onclick="move(1)">अगला प्रश्न</button>
+</div>
+<button class="btn submit" onclick="submitTest()">टेस्ट सबमिट करें</button>
+</section>
+
+<section class="panel hidden result" id="result">
+<h2>आपका परिणाम</h2>
+<div class="score" id="score"></div>
+<p id="message"></p>
+<button class="btn primary" onclick="location.reload()">दोबारा टेस्ट दें</button>
+</section>
+
+<section class="panel hidden" id="review">
+<h2>उत्तर एवं व्याख्या</h2>
+<div id="reviewList"></div>
+</section>
+<footer>© Current Capsule</footer>
+</div>
+
+<script>
+const questions=[
+{c:"भारत-जापान संबंध",q:"18–19 नवंबर 2026 को राजनाथ सिंह किस देश की आधिकारिक यात्रा पर हैं?",o:["फ्रांस","जापान","ऑस्ट्रेलिया","दक्षिण कोरिया"],a:1,e:"रक्षा मंत्री राजनाथ सिंह 18–19 नवंबर को जापान यात्रा पर हैं।"},
+{c:"भारत-जापान संबंध",q:"भारत-जापान 2+2 वार्ता का कौन-सा संस्करण 2026 में आयोजित हो रहा है?",o:["दूसरा","तीसरा","चौथा","पाँचवाँ"],a:2,e:"यह चौथा संस्करण है।"},
+{c:"भारत-जापान संबंध",q:"भारत-जापान 2+2 वार्ता 2026 में कहाँ निर्धारित है?",o:["ओसाका","टोक्यो","क्योटो","योकोहामा"],a:1,e:"वार्ता टोक्यो में निर्धारित है।"},
+{c:"समुद्री सुरक्षा",q:"राजनाथ सिंह ने जापान के किस नौसैनिक अड्डे का दौरा किया?",o:["सासेबो","कुरे","योकोसुका","माइज़ुरु"],a:2,e:"उन्होंने योकोसुका नौसैनिक अड्डे का दौरा किया।"},
+{c:"समुद्री सुरक्षा",q:"योकोसुका में किस Mogami-class फ्रिगेट का निरीक्षण किया?",o:["JS Natori","JS Kaga","JS Izumo","JS Akizuki"],a:0,e:"उन्होंने JS Natori का निरीक्षण किया।"},
+{c:"रक्षा",q:"भारत ने Israel Aerospace Industries के साथ ₹1,976 करोड़ का अनुबंध किस प्रणाली के लिए किया?",o:["आकाश मिसाइल प्रणाली","बराक पॉइंट डिफेन्स मिसाइल सिस्टम","पिनाका","ध्रुव हेलीकॉप्टर"],a:1,e:"अनुबंध Barak Point Defence Missile System से जुड़ा है।"},
+{c:"विज्ञान एवं कृषि",q:"भारत की पहली स्वदेशी H5N1 चिकन वैक्सीन किस संस्थान ने विकसित की?",o:["ICAR-NIHSAD, भोपाल","IIT मद्रास","NIV पुणे","IARI दिल्ली"],a:0,e:"इसे ICAR-NIHSAD, भोपाल ने विकसित किया।"},
+{c:"विज्ञान एवं कृषि",q:"H5N1 चिकन वैक्सीन किस रोग से संबंधित है?",o:["डेंगू","एवियन इन्फ्लुएंजा","निपाह","स्वाइन फ्लू"],a:1,e:"H5N1 बर्ड फ्लू वायरस का subtype है।"},
+{c:"भारतीय नौसेना",q:"INAS 312 'Albatross' किसकी स्वर्ण जयंती मना रही है?",o:["50 वर्ष की समुद्री टोही सेवा","पनडुब्बी सेवा","विमानवाहक सेवा","तटीय सुरक्षा"],a:0,e:"यह लंबी दूरी की समुद्री टोही सेवा के 50 वर्ष पूरे होने से जुड़ा है।"},
+{c:"शासन एवं प्रशासन",q:"'कर्मयोगी संकल्प' किस संस्था की राष्ट्रीय कार्यशाला में लॉन्च किया गया?",o:["वित्त आयोग","नीति आयोग","निर्वाचन आयोग","UPSC"],a:1,e:"यह नीति आयोग की Leadership as a Mission कार्यशाला में लॉन्च किया गया।"}
+];
+
+let current=0;
+let answers=Array(questions.length).fill(null);
+let remaining=600;
+let interval=null;
+let done=false;
+
+function startTest(){
+ document.getElementById('intro').classList.add('hidden');
+ document.getElementById('quiz').classList.remove('hidden');
+ render();
+ interval=setInterval(()=>{
+ remaining--;
+ document.getElementById('timer').textContent=
+ Math.floor(remaining/60)+":"+String(remaining%60).padStart(2,'0');
+ if(remaining<=0)submitTest();
+ },1000);
+}
+
+function render(){
+ let q=questions[current];
+ document.getElementById('counter').textContent=
+ `प्रश्न ${current+1}/${questions.length}`;
+ document.getElementById('category').textContent=q.c;
+ document.getElementById('question').textContent=q.q;
+ document.getElementById('bar').style.width=
+ ((current+1)/questions.length*100)+"%";
+
+ document.getElementById('options').innerHTML=q.o.map((x,i)=>
+ `<label class="option ${answers[current]===i?'selected':''}">
+ <input type="radio" name="answer" ${answers[current]===i?'checked':''}
+ onchange="choose(${i})">
+ <span><b>${"ABCD"[i]}.</b> ${x}</span></label>`
+ ).join('');
+}
+
+function choose(i){
+ answers[current]=i;
+ render();
+}
+
+function move(n){
+ current=Math.max(0,Math.min(questions.length-1,current+n));
+ render();
+}
+
+function submitTest(){
+ if(done)return;
+ done=true;
+ clearInterval(interval);
+ let score=questions.reduce((s,q,i)=>s+(answers[i]===q.a?1:0),0);
+
+ document.getElementById('quiz').classList.add('hidden');
+ document.getElementById('result').classList.remove('hidden');
+ document.getElementById('review').classList.remove('hidden');
+ document.getElementById('score').textContent=score+"/10";
+ document.getElementById('message').textContent=
+ score>=8?"शानदार! आपकी तैयारी अच्छी है।":
+ score>=5?"अच्छा प्रयास! गलत उत्तरों का रिवीजन करें।":
+ "चिंता न करें—व्याख्या पढ़ें और दोबारा अभ्यास करें।";
+
+ document.getElementById('reviewList').innerHTML=
+ questions.map((q,i)=>`
+ <div class="review-item">
+ <b>प्रश्न ${i+1}. ${q.q}</b>
+ <p class="${answers[i]===q.a?'correct':'wrong'}">
+ ${answers[i]===q.a?'✓ सही':'✗ गलत / अनुत्तरित'}
+ </p>
+ <p><b>सही उत्तर:</b> ${q.o[q.a]}</p>
+ <p>${q.e}</p>
+ </div>`).join('');
+ window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
